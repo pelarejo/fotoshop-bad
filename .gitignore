@@ -13,7 +13,3 @@ hs_err_pid*
 
 # OS X
 .DS_STORE
-
-# Netbeans
-nbproject/
-build/
