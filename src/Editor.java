@@ -1,4 +1,5 @@
 
+import Gui.ConsoleController;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +16,7 @@ import javax.imageio.ImageIO;
  * To edit an image, create an instance of this class and call the "edit"
  * method.
  *
- * This main class creates and initialises all the others: it creates the parser
+ * This main class creates and initializes all the others: it creates the parser
  * and  evaluates and executes the commands that the parser returns.
  *
  * @author Richard Jones
@@ -32,38 +33,21 @@ public class Editor {
     String filter3;
     String filter4;
    
+    ConsoleController mConsole;
+    
     /**
-     * Create the editor and initialise its parser.
+     * Create the editor and initialize its parser.
      */
     public Editor() {
         parser = new Parser();
+        mConsole = new ConsoleController();
     }
 
     /**
      * Main edit routine. Loops until the end of the editing session.
      */
     public void edit() {
-        printWelcome();
 
-        // Enter the main command loop.  Here we repeatedly read commands and
-        // execute them until the editing session is over.
-        boolean finished = false;
-        while (!finished) {
-            Command command = parser.getCommand();
-            finished = processCommand(command);
-        }
-        System.out.println("Thank you for using Fotoshop.  Good bye.");
-    }
-
-    /**
-     * Print out the opening message for the user.
-     */
-    private void printWelcome() {
-        System.out.println();
-        System.out.println("Welcome to Fotoshop!");
-        System.out.println("Fotoshop is an amazing new, image editing tool.");
-        System.out.println("Type 'help' if you need help.");
-        System.out.println();
         System.out.println("The current image is " + name);
         System.out.print("Filters applied: ");
         if (filter1 != null) {
@@ -79,7 +63,18 @@ public class Editor {
             System.out.print(filter4 + " ");
         }
         System.out.println();
+        
+        // Enter the main command loop.  Here we repeatedly read commands and
+        // execute them until the editing session is over.
+        boolean finished = false;
+        while (!finished) {
+            Command command = parser.getCommand();
+            finished = processCommand(command);
+        }
+        System.out.println("Thank you for using Fotoshop.  Good bye.");
     }
+
+
 
     /**
      * Given a command, edit (that is: execute) the command.
