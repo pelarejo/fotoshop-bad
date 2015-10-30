@@ -47,22 +47,6 @@ public class Editor {
      * Main edit routine. Loops until the end of the editing session.
      */
     public void edit() {
-
-        System.out.println("The current image is " + name);
-        System.out.print("Filters applied: ");
-        if (filter1 != null) {
-            System.out.print(filter1 + " ");
-        }
-        if (filter2 != null) {
-            System.out.print(filter2 + " ");
-        }
-        if (filter3 != null) {
-            System.out.print(filter3 + " ");
-        }
-        if (filter4 != null) {
-            System.out.print(filter4 + " ");
-        }
-        System.out.println();
         
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the editing session is over.
