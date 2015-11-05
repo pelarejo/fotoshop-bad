@@ -2,11 +2,6 @@ package main;
 
 import main.locale.LocaleManager;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 /**
  * This is the main class for the Fotoshop application
  * 
@@ -17,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length > 0) {
+            // This should makes it possible to load language settings at a later date
             LocaleManager.getInstance().setLocale(args[0]);
         }
         new Editor().edit();

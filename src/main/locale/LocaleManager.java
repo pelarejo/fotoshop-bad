@@ -11,37 +11,41 @@ import java.util.ResourceBundle;
 public class LocaleManager {
     private static LocaleManager instance = new LocaleManager();
 
-    private final Map<String, Locale> supportedLocales = new HashMap<>();
+    private static final String MESSAGES_PATH = "res.strings.messages";
+    private static final Map<String, Locale> SUPPORTED_LOCALES = new HashMap<>();
+    static {
+        SUPPORTED_LOCALES.put("EN", Locale.ENGLISH);
+        SUPPORTED_LOCALES.put("FR", Locale.FRENCH);
+    }
+
     private Locale currentLocale = Locale.ENGLISH;
-    private ResourceBundle bundleStrings = ResourceBundle.getBundle("res.strings.messages", currentLocale);
+    private ResourceBundle bundleStrings = ResourceBundle.getBundle(MESSAGES_PATH, currentLocale);
+
 
     public static LocaleManager getInstance() { return instance; }
 
-    public boolean setLocale(String loc) {
-        String locUpp = loc.toUpperCase();
-        if (!this.supportedLocales.containsKey(locUpp)) {
-            //Using properties here for consistency purposes. Will use english.
-            String msg = getString("error.not.found.locale");
-            //Todo: use GUi
-            System.out.println(MessageFormat.format(msg, loc));
-            return false;
-        } else {
-            this.currentLocale = this.supportedLocales.get(locUpp);
-            this.bundleStrings = ResourceBundle.getBundle("res.strings.messages", this.currentLocale);
-            return true;
-        }
+    public String getString(@NotNull String key) {
+        return this.bundleStrings.getString(key);
     }
 
     public Locale getLocale() {
         return this.currentLocale;
     }
 
-    public String getString(@NotNull String key) {
-        return this.bundleStrings.getString(key);
+    public boolean setLocale(String loc) {
+        String locUpp = loc.toUpperCase();
+        if (!SUPPORTED_LOCALES.containsKey(locUpp)) {
+            //Using properties here for consistency purposes. Will use english.
+            String msg = getString("error.not.found.locale");
+            //Todo: use GUi
+            System.out.println(MessageFormat.format(msg, loc));
+            return false;
+        } else {
+            this.currentLocale = SUPPORTED_LOCALES.get(locUpp);
+            this.bundleStrings = ResourceBundle.getBundle(MESSAGES_PATH, this.currentLocale);
+            return true;
+        }
     }
 
-    private LocaleManager() {
-        this.supportedLocales.put("EN", Locale.ENGLISH);
-        this.supportedLocales.put("FR", Locale.FRENCH);
-    }
+    private LocaleManager() {}
 }

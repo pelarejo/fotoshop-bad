@@ -1,6 +1,6 @@
 package main;
 
-import gui.ConsoleController;
+import main.gui.ConsoleController;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;

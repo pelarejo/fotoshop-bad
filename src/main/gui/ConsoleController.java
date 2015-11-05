@@ -1,16 +1,13 @@
 package main.gui;
 
+import main.locale.LocaleManager;
 
 public class ConsoleController extends AGuiController {
 
     // TO REMOVE
     
     // Create a model for this that fetch depending of language
-    private static final String SPLASH_MSG = "\n"
-            + "Welcome to Fotoshop\n"
-            + "Fotoshop is an amazing new, image editing tool.\n"
-            + "Type 'help' if you need help\n"
-            + "\n";
+    private static final String SPLASH_MSG = LocaleManager.getInstance().getString("splash.screen");
     
     //
     
