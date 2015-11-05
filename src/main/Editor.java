@@ -1,5 +1,6 @@
+package main;
 
-import Gui.ConsoleController;
+import gui.ConsoleController;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class Editor {
     }
 
     /**
-     * Main edit routine. Loops until the end of the editing session.
+     * main.Main edit routine. Loops until the end of the editing session.
      */
     public void edit() {
         
@@ -113,7 +114,7 @@ public class Editor {
     /**
      * Load an image from a file.
      * @param name The name of the image file
-     * @return a ColorImage containing the image
+     * @return a main.ColorImage containing the image
      */
     private ColorImage loadImage(String name) {
         ColorImage img = null;

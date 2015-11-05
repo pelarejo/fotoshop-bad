@@ -1,3 +1,5 @@
+package main;
+
 import java.awt.*;
 import java.awt.image.*;
 
@@ -17,7 +19,7 @@ import java.awt.image.*;
 public class ColorImage extends BufferedImage
 {
     /**
-     * Create a ColorImage copied from a BufferedImage
+     * Create a main.ColorImage copied from a BufferedImage
      * Convert to 24-bit direct colour
      * @param image The image to copy
      */
@@ -32,7 +34,7 @@ public class ColorImage extends BufferedImage
     }
 
     /**
-     * Create a ColorImage with specified size and 24-bit direct colour
+     * Create a main.ColorImage with specified size and 24-bit direct colour
      * @param width The width of the image
      * @param height The height of the image
      */
