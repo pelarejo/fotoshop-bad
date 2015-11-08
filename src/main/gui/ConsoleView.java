@@ -1,7 +1,7 @@
 package main.gui;
 
 
-public class ConsoleView extends ATextView {
+public class ConsoleView implements IView {
 
     @Override
     public void updateView(String text) {

@@ -1,5 +1,5 @@
 package main.gui;
 
-public abstract class ATextView {
+interface IView {
     abstract void updateView(String text);
 }
