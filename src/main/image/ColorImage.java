@@ -1,10 +1,7 @@
 package main.image;
 
-import main.command.CommandFactory;
-
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * Extends standard BufferedImage class with convenience functions
@@ -21,7 +18,7 @@ import java.util.*;
 
 public class ColorImage extends BufferedImage {
 
-    String name;
+    String originalPath;
 
     /**
      * Create a main.image.ColorImage copied from a BufferedImage
@@ -29,7 +26,7 @@ public class ColorImage extends BufferedImage {
      *
      * @param image The image to copy
      */
-    public ColorImage(BufferedImage image) {
+    protected ColorImage(BufferedImage image) {
         super(image.getWidth(), image.getHeight(), TYPE_INT_RGB);
         int width = image.getWidth();
         int height = image.getHeight();
@@ -40,12 +37,12 @@ public class ColorImage extends BufferedImage {
 
     public ColorImage(ColorImage image) {
         this((BufferedImage) image);
-        this.name = image.getName();
+        this.originalPath = image.getOriginalPath();
     }
 
-    public ColorImage(String name, BufferedImage image) {
+    public ColorImage(String path, BufferedImage image) {
         this(image);
-        this.name = name;
+        this.originalPath = path;
     }
 
     /**
@@ -54,8 +51,9 @@ public class ColorImage extends BufferedImage {
      * @param width  The width of the image
      * @param height The height of the image
      */
-    public ColorImage(int width, int height) {
+    public ColorImage(String path, int width, int height) {
         super(width, height, TYPE_INT_RGB);
+        this.originalPath = path;
     }
 
     /**
@@ -83,7 +81,7 @@ public class ColorImage extends BufferedImage {
         return new Color(pixel);
     }
 
-    public String getName() {
-        return name;
+    public String getOriginalPath() {
+        return this.originalPath;
     }
 }

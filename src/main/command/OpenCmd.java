@@ -16,18 +16,24 @@ public class OpenCmd extends CommandFactory.Command {
     }
 
     @Override
+    public String getTag() {
+        return TAG;
+    }
+
+
+    @Override
     public boolean execute() {
         if (this.args.length < 1) {
             // if there is no second word, we don't know what to open...
             System.out.println("open what?");
             return false;
         }
-        String inputName = this.args[0];
-        ColorImage img = loadImage(inputName);
+        String path = this.args[0];
+        ColorImage img = loadImage(path);
         if (img != null) {
-            ImageManager.getInstance().setCurrentImage(img);
+            ImageManager.getInstance().newImage(path, img);
             //TODO: There must be better
-            System.out.println("Loaded " + img.getName());
+            System.out.println("Loaded " + img.getOriginalPath());
         }
         return true;
     }
@@ -35,15 +41,15 @@ public class OpenCmd extends CommandFactory.Command {
     /**
      * Load an image from a file.
      *
-     * @param name The name of the image file
+     * @param path The path of the image file
      * @return a main.image.ColorImage containing the image
      */
-    private ColorImage loadImage(String name) {
+    private ColorImage loadImage(String path) {
         ColorImage img = null;
         try {
-            img = new ColorImage(name, ImageIO.read(new File(name)));
+            img = new ColorImage(path, ImageIO.read(new File(path)));
         } catch (IOException e) {
-            System.out.println("Cannot find image file, " + name);
+            System.out.println("Cannot find image file, " + path);
             System.out.println("cwd is " + System.getProperty("user.dir"));
         }
         return img;

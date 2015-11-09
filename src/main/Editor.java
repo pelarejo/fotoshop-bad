@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 /**
@@ -79,22 +80,28 @@ public class Editor {
             return false;
         }
         String commandWord = command.getCommandWord();
+        ArrayList<String> str = new ArrayList<>();
+        str.add(command.getSecondWord());
+        str.add(command.getThirdWord());
         if (commandWord.equals("help")) {
-            CommandFactory.Command cmd = CommandFactory.get("help", "test", "test2");
+            CommandFactory.Command cmd = CommandFactory.get("help", str.toArray(new String[str.size()]));
             cmd.execute();
         } else if (commandWord.equals("open")) {
-            //open(command);
             //TODO: get should be in parser
-            CommandFactory.Command cmd = CommandFactory.get("open");
+            CommandFactory.Command cmd = CommandFactory.get("open", str.toArray(new String[str.size()]));
             cmd.execute();
         } else if (commandWord.equals("save")) {
-            save(command);
+            CommandFactory.Command cmd = CommandFactory.get("save", str.toArray(new String[str.size()]));
+            cmd.execute();
         } else if (commandWord.equals("mono")) {
-            mono(command);
+            CommandFactory.Command cmd = CommandFactory.get("mono", str.toArray(new String[str.size()]));
+            cmd.execute();
         } else if (commandWord.equals("rot90")) {
-            rot90(command);
+            CommandFactory.Command cmd = CommandFactory.get("rot90", str.toArray(new String[str.size()]));
+            cmd.execute();
         } else if (commandWord.equals("look")) {
-            look(command);
+            CommandFactory.Command cmd = CommandFactory.get("look", str.toArray(new String[str.size()]));
+            cmd.execute();
         } else if (commandWord.equals("script")) {
             wantToQuit = script(command);
         } else if (commandWord.equals("quit")) {
@@ -106,187 +113,6 @@ public class Editor {
 //----------------------------------
 // Implementations of user commands:
 //----------------------------------
-
-    /**
-     * Print out some help information. Here we print some useless, cryptic
-     * message and a list of the command words.
-     */
-    private void printHelp() {
-        System.out.println("You are using Fotoshop.");
-        System.out.println();
-        System.out.println("Your command words are:");
-        System.out.println("   open save look mono flipH rot90 help quit");
-    }
-
-    /**
-     * Load an image from a file.
-     *
-     * @param name The name of the image file
-     * @return a main.image.ColorImage containing the image
-     */
-    private ColorImage loadImage(String name) {
-        ColorImage img = null;
-        try {
-            img = new ColorImage(name, ImageIO.read(new File(name)));
-        } catch (IOException e) {
-            System.out.println("Cannot find image file, " + name);
-            System.out.println("cwd is " + System.getProperty("user.dir"));
-        }
-        return img;
-    }
-
-
-    /**
-     * "open" was entered. Open the file given as the second word of the command
-     * and use as the current image.
-     *
-     * @param command the command given.
-     */
-    private void open(Command command) {
-        if (!command.hasSecondWord()) {
-            // if there is no second word, we don't know what to open...
-            System.out.println("open what?");
-            return;
-        }
-
-        String inputName = command.getSecondWord();
-        ColorImage img = loadImage(inputName);
-        if (img == null) {
-            printHelp();
-        } else {
-            currentImage = img;
-            name = inputName;
-            filter1 = null;
-            filter2 = null;
-            filter3 = null;
-            filter4 = null;
-            System.out.println("Loaded " + name);
-        }
-    }
-
-    /**
-     * "save" was entered. Save the current image to the file given as the
-     * second word of the command.
-     *
-     * @param command the command given
-     */
-    private void save(Command command) {
-        if (currentImage == null) {
-            printHelp();
-            return;
-        }
-        if (!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to save...
-            System.out.println("save where?");
-            return;
-        }
-
-        String outputName = command.getSecondWord();
-        try {
-            File outputFile = new File(outputName);
-            ImageIO.write(currentImage, "jpg", outputFile);
-            System.out.println("Image saved to " + outputName);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            printHelp();
-        }
-    }
-
-    /**
-     * "look" was entered. Report the status of the work bench.
-     *
-     * @param command the command given.
-     */
-    private void look(Command command) {
-        System.out.println("The current image is " + name);
-        System.out.print("Filters applied: ");
-        if (filter1 != null) {
-            System.out.print(filter1 + " ");
-        }
-        if (filter2 != null) {
-            System.out.print(filter2 + " ");
-        }
-        if (filter3 != null) {
-            System.out.print(filter3 + " ");
-        }
-        if (filter4 != null) {
-            System.out.print(filter4 + " ");
-        }
-        System.out.println();
-    }
-
-    /**
-     * "mono" was entered. Convert the current image to monochrome.
-     *
-     * @param command the command given.
-     */
-    private void mono(Command command) {
-        if (filter4 != null) {
-            System.out.println("Filter pipeline exceeded");
-            return;
-        }
-
-        ColorImage tmpImage = new ColorImage(currentImage);
-        //Graphics2D g2 = currentImage.createGraphics();
-        int height = tmpImage.getHeight();
-        int width = tmpImage.getWidth();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color pix = tmpImage.getPixel(x, y);
-                int lum = (int) Math.round(0.299 * pix.getRed()
-                        + 0.587 * pix.getGreen()
-                        + 0.114 * pix.getBlue());
-                tmpImage.setPixel(x, y, new Color(lum, lum, lum));
-            }
-        }
-        currentImage = tmpImage;
-
-        if (filter1 == null) {
-            filter1 = "mono";
-        } else if (filter2 == null) {
-            filter2 = "mono";
-        } else if (filter3 == null) {
-            filter3 = "mono";
-        } else if (filter4 == null) {
-            filter4 = "mono";
-        }
-    }
-
-    /**
-     * "rot90" was entered. Rotate the current image 90 degrees.
-     *
-     * @param command the command given.
-     */
-    private void rot90(Command command) {
-        if (filter4 != null) {
-            System.out.println("Filter pipeline exceeded");
-            return;
-        }
-
-        // R90 = [0 -1, 1 0] rotates around origin
-        // (x,y) -> (-y,x)
-        // then transate -> (height-y, x)
-        int height = currentImage.getHeight();
-        int width = currentImage.getWidth();
-        ColorImage rotImage = new ColorImage(height, width);
-        for (int y = 0; y < height; y++) { // in the rotated image
-            for (int x = 0; x < width; x++) {
-                Color pix = currentImage.getPixel(x, y);
-                rotImage.setPixel(height - y - 1, x, pix);
-            }
-        }
-        currentImage = rotImage;
-        if (filter1 == null) {
-            filter1 = "rot90";
-        } else if (filter2 == null) {
-            filter2 = "rot90";
-        } else if (filter3 == null) {
-            filter3 = "rot90";
-        } else if (filter4 == null) {
-            filter4 = "rot90";
-        }
-    }
-
     /**
      * The 'script' command runs a sequence of commands from a
      * text file.

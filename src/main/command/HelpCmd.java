@@ -6,8 +6,13 @@ public class HelpCmd extends CommandFactory.Command {
 
     public static final String TAG = "help";
 
-    protected HelpCmd(String[] args) {
+    public HelpCmd(String[] args) {
         super(args);
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 
     @Override

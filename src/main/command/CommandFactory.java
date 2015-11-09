@@ -1,14 +1,8 @@
 package main.command;
 
-import main.image.ImageManager;
-import sun.jvm.hotspot.utilities.Assert;
-
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,14 +11,17 @@ public final class CommandFactory {
     private static final Logger logger;
     static {
         cmds = new HashMap<>();
+        logger = Logger.getLogger(CommandFactory.class.getName());
+        // ADD Commands HERE
         addCommand(HelpCmd.TAG, HelpCmd.class);
         addCommand(OpenCmd.TAG, OpenCmd.class);
+        addCommand(SaveCmd.TAG, SaveCmd.class);
         addCommand(Rot90Cmd.TAG, Rot90Cmd.class);
-        logger = Logger.getLogger(CommandFactory.class.getName());
+        addCommand(MonoCmd.TAG, MonoCmd.class);
+        addCommand(LookCmd.TAG, LookCmd.class);
     }
 
     public static abstract class Command {
-        public static final String TAG = null;
         protected String[] args;
 
         /**
@@ -32,15 +29,22 @@ public final class CommandFactory {
          *
          * @param args is a list of arguments
          */
-        protected Command(String[] args) {
+        public Command(String[] args) {
             this.args = args;
         }
+
+        public abstract String getTag();
 
         public abstract boolean execute();
     }
 
-    public interface Undoable {
-        void undo();
+    public static abstract class UndoableCommand extends Command {
+
+        public UndoableCommand(String[] args) {
+            super(args);
+        }
+
+        public abstract boolean undo();
     }
 
     /**
