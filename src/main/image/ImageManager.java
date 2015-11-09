@@ -1,7 +1,10 @@
 package main.image;
 
 import main.command.CommandFactory;
+import main.gui.ConsoleView;
+import main.locale.LocaleManager;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 public class ImageManager {
@@ -64,9 +67,12 @@ public class ImageManager {
      * @param img
      */
     public void newImage(String tag, ColorImage img) {
-        if (this.currentImage != null) {
-            //todo: warning overriding
-        }
+        /*
+        *   TODO: Future revision should ask before override
+        * if (this.currentImage != null) {
+        *   //ASK
+        *   }
+        */
         this.currentImage = new EditableImage(tag, img);
     }
 
@@ -79,8 +85,8 @@ public class ImageManager {
         if (this.currentImage == null)
             return;
         if (this.cache.containsKey(tag)) {
-            //TODO: better
-            System.out.print("Erasing image of the same originalPath");
+            String msg = LocaleManager.getInstance().getString("image.manager.erasing.img");
+            new ConsoleView().update(MessageFormat.format(msg, tag));
         }
         this.cache.put(tag, new EditableImage(tag, currentImage));
     }
@@ -106,10 +112,11 @@ public class ImageManager {
      * @return
      */
     public boolean edit(ColorImage img, CommandFactory.Command cmd) {
-        //TODO: better
-        if (!(cmd instanceof CommandFactory.UndoableCommand) && this.currentImage.cmdHistory.size() > 0) {
-            System.out.print("Trigger Warning");
-        }
+        /*  TODO: Future revision should trigger warning when pushing a non-undoable command
+        *   if (!(cmd instanceof CommandFactory.UndoableCommand) && this.currentImage.cmdHistory.size() > 0) {
+        *       System.out.print("Warning");
+        *   }
+        */
         this.currentImage.image = img;
         this.currentImage.cmdHistory.push(cmd);
         return true;
@@ -118,15 +125,21 @@ public class ImageManager {
     /**
      * Undo the current image's last filter
      */
-    public void undoEdit() {
+    public boolean undoEdit() {
         try {
-            CommandFactory.Command cmd = this.currentImage.cmdHistory.pop();
+            CommandFactory.Command cmd = this.currentImage.cmdHistory.peek();
             if (cmd instanceof CommandFactory.UndoableCommand) {
-                ((CommandFactory.UndoableCommand) cmd).undo();
+                if (((CommandFactory.UndoableCommand) cmd).undo()) {
+                    this.currentImage.cmdHistory.pop();
+                    return true;
+                }
+                return false;
+            } else {
+                throw new EmptyStackException(); // Will show nothing to undo msg
             }
         } catch (EmptyStackException e) {
-            // TODO: catch this
-            System.out.print("No stack:" + e.getMessage());
+            new ConsoleView().update(LocaleManager.getInstance().getString("image.manager.no.stack"));
+            return true;
         }
     }
 }

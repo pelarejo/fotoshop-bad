@@ -1,18 +1,9 @@
 package main;
 
-import main.command.CommandFactory;
-import main.gui.ConsoleController;
-import main.image.ColorImage;
-import main.image.ImageManager;
+import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
-import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
+import java.text.MessageFormat;
 
 /**
  * This class is the main processing class of the Fotoshop application.
@@ -32,139 +23,57 @@ import javax.imageio.ImageIO;
 
 public class Editor {
 
-    Parser parser;
-    ColorImage currentImage;
-    String name;
-    String filter1;
-    String filter2;
-    String filter3;
-    String filter4;
+    private static PROGRAM_STATE eState;
 
-    ConsoleController mConsole;
+    private Parser parser;
+    private ConsoleView console = new ConsoleView();
+
+    public enum PROGRAM_STATE {
+        RUN, QUIT
+    }
 
     /**
      * Create the editor and initialize its parser.
      */
     public Editor() {
         parser = new Parser();
-        mConsole = new ConsoleController();
+    }
+
+    public static void setState(PROGRAM_STATE state) {
+        eState = state;
+    }
+
+    public static PROGRAM_STATE getState() {
+        return eState;
     }
 
     /**
      * main.Main edit routine. Loops until the end of the editing session.
      */
     public void edit() {
-
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the editing session is over.
-        boolean finished = false;
-        while (!finished) {
-            Command command = parser.getCommand();
-            finished = processCommand(command);
-        }
-        System.out.println(LocaleManager.getInstance().getString("screen.end"));
-    }
-
-
-    /**
-     * Given a command, edit (that is: execute) the command.
-     *
-     * @param command The command to be processed.
-     * @return true If the command ends the editing session, false otherwise.
-     */
-    private boolean processCommand(Command command) {
-        boolean wantToQuit = false;
-
-        if (command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
-            return false;
-        }
-        String commandWord = command.getCommandWord();
-        ArrayList<String> str = new ArrayList<>();
-        str.add(command.getSecondWord());
-        str.add(command.getThirdWord());
-        if (commandWord.equals("help")) {
-            CommandFactory.Command cmd = CommandFactory.get("help", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("open")) {
-            //TODO: get should be in parser
-            CommandFactory.Command cmd = CommandFactory.get("open", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("save")) {
-            CommandFactory.Command cmd = CommandFactory.get("save", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("mono")) {
-            CommandFactory.Command cmd = CommandFactory.get("mono", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("rot90")) {
-            CommandFactory.Command cmd = CommandFactory.get("rot90", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("look")) {
-            CommandFactory.Command cmd = CommandFactory.get("look", str.toArray(new String[str.size()]));
-            cmd.execute();
-        } else if (commandWord.equals("script")) {
-            wantToQuit = script(command);
-        } else if (commandWord.equals("quit")) {
-            wantToQuit = quit(command);
-        }
-        return wantToQuit;
-    }
-
-//----------------------------------
-// Implementations of user commands:
-//----------------------------------
-    /**
-     * The 'script' command runs a sequence of commands from a
-     * text file.
-     * <p>
-     * IT IS IMPORTANT THAT THIS COMMAND WORKS AS IT CAN BE USED FOR TESTING
-     *
-     * @param command the script command, second word of which is the name of
-     *                the script file.
-     * @return whether to quit.
-     */
-    private boolean script(Command command) {
-        if (!command.hasSecondWord()) {
-            // if there is no second word, we don't know what to open...
-            System.out.println("which script");
-            return false;
-        }
-
-        String scriptName = command.getSecondWord();
-        Parser scriptParser = new Parser();
-        try (FileInputStream inputStream = new FileInputStream(scriptName)) {
-            scriptParser.setInputStream(inputStream);
-            boolean finished = false;
-            while (!finished) {
-                try {
-                    Command cmd = scriptParser.getCommand();
-                    finished = processCommand(cmd);
-                } catch (Exception ex) {
-                    return finished;
-                }
+        this.console.update(LocaleManager.getInstance().getString("screen.splash"));
+        eState = PROGRAM_STATE.RUN;
+        while (eState.equals(PROGRAM_STATE.RUN)) {
+           this.console.update("> ");     // print prompt
+            Parser.ParsedInput parsedInput = parser.getCommand();
+            switch (parsedInput.eState) {
+                case VALID:
+                    parsedInput.cmd.execute();
+                    break;
+                case INVALID:
+                    String msg = LocaleManager.getInstance().getString("error.command.invalid");
+                    msg = MessageFormat.format(msg, parsedInput.what);
+                    this.console.update(msg);
+                    break;
+                case INVALID_ARG:
+                    this.console.update(parsedInput.what);
+                    break;
+                case EMPTY:
+                    break;
             }
-            return finished;
-        } catch (FileNotFoundException ex) {
-            System.out.println("Cannot find " + scriptName);
-            return false;
-        } catch (IOException ex) {
-            throw new RuntimeException("Panic: script barfed!");
         }
-    }
-
-    /**
-     * "Quit" was entered. Check the rest of the command to see whether we
-     * really quit the editor.
-     *
-     * @param command the command given.
-     * @return true, if this command quits the editor, false otherwise.
-     */
-    private boolean quit(Command command) {
-        if (command.hasSecondWord()) {
-            System.out.println("Quit what?");
-            return false;
-        } else {
-            return true;  // signal that we want to quit
-        }
+        this.console.update(LocaleManager.getInstance().getString("screen.end"));
     }
 }

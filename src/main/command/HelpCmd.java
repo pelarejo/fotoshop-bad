@@ -1,10 +1,13 @@
 package main.command;
 
+import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
 public class HelpCmd extends CommandFactory.Command {
 
-    public static final String TAG = "help";
+    public static final String TAG = "command.help.msg";
+
+    private ConsoleView console = new ConsoleView();
 
     public HelpCmd(String[] args) {
         super(args);
@@ -17,8 +20,7 @@ public class HelpCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        //TODO: replace all prints
-        System.out.print(LocaleManager.getInstance().getString("help"));
+        this.console.update(LocaleManager.getInstance().getString("command.help.msg"));
         return true;
     }
 }

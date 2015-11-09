@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            // This should makes it possible to load language settings at a later date
+            // Add language file setting loading here
             LocaleManager.getInstance().setLocale(args[0]);
         }
         new Editor().edit();

@@ -1,11 +1,10 @@
 package main.gui;
 
 
-public class ConsoleView implements IView {
+public class ConsoleView {
 
-    @Override
-    public void updateView(String text) {
-        System.out.print(text);
+    public void update(String txt) {
+        System.out.print(txt);
     }
-    
+
 }

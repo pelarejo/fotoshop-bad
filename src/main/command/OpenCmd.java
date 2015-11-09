@@ -1,18 +1,28 @@
 package main.command;
 
+import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
+import main.locale.LocaleManager;
+import sun.plugin2.message.Message;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 public class OpenCmd extends CommandFactory.Command {
 
     public static final String TAG = "open";
 
+    private ConsoleView console = new ConsoleView();
+
     public OpenCmd(String[] args) {
         super(args);
+        if (this.args.length < 1) {
+            // if there is no second word, we don't know what to open...
+            throw new ArgumentException(LocaleManager.getInstance().getString("error.command.open.argument.none"));
+        }
     }
 
     @Override
@@ -23,19 +33,15 @@ public class OpenCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        if (this.args.length < 1) {
-            // if there is no second word, we don't know what to open...
-            System.out.println("open what?");
-            return false;
-        }
         String path = this.args[0];
         ColorImage img = loadImage(path);
         if (img != null) {
             ImageManager.getInstance().newImage(path, img);
-            //TODO: There must be better
-            System.out.println("Loaded " + img.getOriginalPath());
+            String msg = LocaleManager.getInstance().getString("command.open.loaded");
+            this.console.update(MessageFormat.format(msg, img.getOriginalPath()));
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -49,8 +55,8 @@ public class OpenCmd extends CommandFactory.Command {
         try {
             img = new ColorImage(path, ImageIO.read(new File(path)));
         } catch (IOException e) {
-            System.out.println("Cannot find image file, " + path);
-            System.out.println("cwd is " + System.getProperty("user.dir"));
+            String msg = LocaleManager.getInstance().getString("error.command.open.file.not.found");
+            this.console.update(MessageFormat.format(msg, path, System.getProperty("user.dir")));
         }
         return img;
     }

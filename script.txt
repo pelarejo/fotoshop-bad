@@ -1,5 +1,8 @@
+help
 open input.jpg
 look
+
 rot90
+mono
 save output.jpg
 quit
