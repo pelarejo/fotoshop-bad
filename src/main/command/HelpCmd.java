@@ -5,7 +5,7 @@ import main.locale.LocaleManager;
 
 public class HelpCmd extends CommandFactory.Command {
 
-    public static final String TAG = "command.help.msg";
+    public static final String TAG = "help";
 
     private ConsoleView console = new ConsoleView();
 

@@ -7,6 +7,7 @@ import main.locale.LocaleManager;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -39,6 +40,10 @@ public class SaveCmd extends CommandFactory.Command {
         String outputName = this.args[0];
         try {
             File outputFile = new File(outputName);
+            if (!outputFile.getParentFile().exists()) {
+                // Necessary because ImageIO.write throw NullPointerException, which is dumb
+                throw new FileNotFoundException(MessageFormat.format("Folder {0} doesn't exists", outputFile.getParentFile()));
+            }
             ImageIO.write(img, "jpg", outputFile);
             String msg = LocaleManager.getInstance().getString("command.save.saved");
             this.consoleView.update(MessageFormat.format(msg, outputName));

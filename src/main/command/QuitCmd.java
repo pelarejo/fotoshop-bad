@@ -12,6 +12,9 @@ public class QuitCmd extends CommandFactory.Command {
 
     public QuitCmd(String[] args) {
         super(args);
+        if (this.args.length > 0) {
+            throw new ArgumentException(LocaleManager.getInstance().getString("error.command.quit.argument"));
+        }
     }
 
     @Override
@@ -21,12 +24,7 @@ public class QuitCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        if (this.args.length > 1) {
-            this.console.update(LocaleManager.getInstance().getString("error.command.quit.argument"));
-            return false;
-        } else {
-            Editor.setState(Editor.PROGRAM_STATE.QUIT);
-            return true;
-        }
+        Editor.setState(Editor.PROGRAM_STATE.QUIT);
+        return true;
     }
 }

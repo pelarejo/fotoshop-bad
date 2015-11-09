@@ -34,15 +34,16 @@ public class LookCmd extends CommandFactory.Command {
             this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
             return true;
         }
-        String msg = LocaleManager.getInstance().getString("command.look.current.img");
-        this.consoleView.update(MessageFormat.format(msg, curImg.getTag()));
+        this.consoleView.update(LocaleManager.getInstance().getString("command.look.current.img"));
+        String msg = LocaleManager.getInstance().getString("command.look.img.name");
+        this.consoleView.update(MessageFormat.format(msg, curImg.getTag(), curImg.getImage().getOriginalPath()));
         lookHistory(curImg.getHistory());
         this.consoleView.update("\n");
 
         Map<String, ImageManager.EditableImage> cache = ImageManager.getInstance().getCache();
         if (cache.size() > 0) {
             this.consoleView.update(LocaleManager.getInstance().getString("command.look.cache.img"));
-            msg = LocaleManager.getInstance().getString("command.look.cache.img.name");
+            msg = LocaleManager.getInstance().getString("command.look.img.name");
             for (ImageManager.EditableImage img : cache.values()) {
                 this.consoleView.update(MessageFormat.format(msg, img.getTag(), img.getImage().getOriginalPath()));
                 lookHistory(img.getHistory());

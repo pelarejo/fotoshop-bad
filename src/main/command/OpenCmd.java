@@ -51,13 +51,12 @@ public class OpenCmd extends CommandFactory.Command {
      * @return a main.image.ColorImage containing the image
      */
     private ColorImage loadImage(String path) {
-        ColorImage img = null;
         try {
-            img = new ColorImage(path, ImageIO.read(new File(path)));
+            return new ColorImage(path, ImageIO.read(new File(path)));
         } catch (IOException e) {
             String msg = LocaleManager.getInstance().getString("error.command.open.file.not.found");
             this.console.update(MessageFormat.format(msg, path, System.getProperty("user.dir")));
+            return null;
         }
-        return img;
     }
 }

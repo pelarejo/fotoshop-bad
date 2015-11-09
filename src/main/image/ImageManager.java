@@ -1,10 +1,8 @@
 package main.image;
 
+import com.sun.istack.internal.NotNull;
 import main.command.CommandFactory;
-import main.gui.ConsoleView;
-import main.locale.LocaleManager;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 public class ImageManager {
@@ -12,8 +10,6 @@ public class ImageManager {
 
     private EditableImage currentImage;
     private Map<String, EditableImage> cache;
-
-    private ConsoleView console = new ConsoleView();
 
     public class EditableImage {
         private String tag;
@@ -28,9 +24,9 @@ public class ImageManager {
 
         private EditableImage(String tag, EditableImage original) {
             this.tag = tag;
-            this.image = original.image;
-            //TODO: test this
-            this.cmdHistory = original.cmdHistory;
+            this.image = new ColorImage(original.image);
+            //noinspection unchecked
+            this.cmdHistory = (Stack<CommandFactory.Command>) original.cmdHistory.clone();
         }
 
         public ColorImage getImage() {
@@ -51,7 +47,7 @@ public class ImageManager {
     }
 
     public ImageManager() {
-        this.cache = new HashMap<>();
+        this.cache = new TreeMap<>();
     }
 
     public EditableImage getCurrentImage() {
@@ -60,6 +56,16 @@ public class ImageManager {
 
     public Map<String, EditableImage> getCache() {
         return Collections.unmodifiableMap(this.cache);
+    }
+
+    /**
+     * Get a cached image
+     *
+     * @param tag of the image
+     * @return a reference of the image
+     */
+    public EditableImage getCachedImage(String tag) {
+        return this.cache.get(tag);
     }
 
     /**
@@ -79,31 +85,21 @@ public class ImageManager {
     }
 
     /**
+     * Replace current image with another one
+     *
+     * @param cached the cached image
+     */
+    public void newImage(EditableImage cached) {
+        this.currentImage = new EditableImage(cached.tag, cached);
+    }
+
+    /**
      * Save the current image to cache
      *
      * @param tag
      */
-    public void cacheImage(String tag) {
-        if (this.currentImage == null)
-            return;
-        if (this.cache.containsKey(tag)) {
-            String msg = LocaleManager.getInstance().getString("image.manager.erasing.img");
-            this.console.update(MessageFormat.format(msg, tag));
-        }
-        this.cache.put(tag, new EditableImage(tag, currentImage));
-    }
-
-    /**
-     * Load a cache image as current image
-     *
-     * @param tag
-     * @return
-     */
-    public boolean loadCacheImage(String tag) {
-        EditableImage cachedImg = this.cache.get(tag);
-        if (cachedImg == null) return false;
-        this.currentImage = new EditableImage(tag, cachedImg);
-        return true;
+    public EditableImage cacheImage(String tag, @NotNull EditableImage ei) {
+        return this.cache.put(tag, new EditableImage(tag, ei));
     }
 
     /**
