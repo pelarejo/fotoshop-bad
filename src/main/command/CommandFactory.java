@@ -22,6 +22,7 @@ public final class CommandFactory {
         addCommand(LookCmd.TAG, LookCmd.class);
         addCommand(QuitCmd.TAG, QuitCmd.class);
         addCommand(ScriptCmd.TAG, ScriptCmd.class);
+        addCommand(UndoCmd.TAG, UndoCmd.class);
     }
 
     public static abstract class Command {

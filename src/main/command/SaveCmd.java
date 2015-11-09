@@ -30,11 +30,12 @@ public class SaveCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        ColorImage img = ImageManager.getInstance().getCurrentImage().getImage();
-        if (img == null) {
+        ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
+        if (ei == null) {
             this.consoleView.update(LocaleManager.getInstance().getString("error.command.save.no.img"));
             return false;
         }
+        ColorImage img = ei.getImage();
         String outputName = this.args[0];
         try {
             File outputFile = new File(outputName);

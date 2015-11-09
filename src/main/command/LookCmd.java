@@ -31,7 +31,7 @@ public class LookCmd extends CommandFactory.Command {
     public boolean execute() {
         ImageManager.EditableImage curImg = ImageManager.getInstance().getCurrentImage();
         if (curImg == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("command.look.no.img"));
+            this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
             return true;
         }
         String msg = LocaleManager.getInstance().getString("command.look.current.img");

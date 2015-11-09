@@ -1,7 +1,9 @@
 package main.command;
 
+import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
+import main.locale.LocaleManager;
 
 import java.awt.*;
 
@@ -13,7 +15,9 @@ public class Rot90Cmd extends CommandFactory.UndoableCommand {
 
     public static final String TAG = "rot90";
 
-    protected Rot90Cmd(String[] args) {
+    private ConsoleView consoleView = new ConsoleView();
+
+    public Rot90Cmd(String[] args) {
         super(args);
     }
 
@@ -24,7 +28,12 @@ public class Rot90Cmd extends CommandFactory.UndoableCommand {
 
     @Override
     public boolean execute() {
-        ColorImage img = ImageManager.getInstance().getCurrentImage().getImage();
+        ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
+        if (ei == null) {
+            this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
+            return false;
+        }
+        ColorImage img = ei.getImage();
         // R90 = [0 -1, 1 0] rotates around origin
         // (x,y) -> (-y,x)
         // then transate -> (height-y, x)
@@ -53,7 +62,7 @@ public class Rot90Cmd extends CommandFactory.UndoableCommand {
                 rotImage.setPixel(y, width - x - 1, pix);
             }
         }
-        ImageManager.getInstance().edit(rotImage, this);
+        ImageManager.getInstance().undoEdit(rotImage);
         return true;
     }
 }

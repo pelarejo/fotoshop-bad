@@ -13,6 +13,8 @@ public class ImageManager {
     private EditableImage currentImage;
     private Map<String, EditableImage> cache;
 
+    private ConsoleView console = new ConsoleView();
+
     public class EditableImage {
         private String tag;
         private ColorImage image;
@@ -86,7 +88,7 @@ public class ImageManager {
             return;
         if (this.cache.containsKey(tag)) {
             String msg = LocaleManager.getInstance().getString("image.manager.erasing.img");
-            new ConsoleView().update(MessageFormat.format(msg, tag));
+            this.console.update(MessageFormat.format(msg, tag));
         }
         this.cache.put(tag, new EditableImage(tag, currentImage));
     }
@@ -125,21 +127,24 @@ public class ImageManager {
     /**
      * Undo the current image's last filter
      */
-    public boolean undoEdit() {
-        try {
-            CommandFactory.Command cmd = this.currentImage.cmdHistory.peek();
-            if (cmd instanceof CommandFactory.UndoableCommand) {
-                if (((CommandFactory.UndoableCommand) cmd).undo()) {
-                    this.currentImage.cmdHistory.pop();
-                    return true;
-                }
-                return false;
-            } else {
-                throw new EmptyStackException(); // Will show nothing to undo msg
-            }
-        } catch (EmptyStackException e) {
-            new ConsoleView().update(LocaleManager.getInstance().getString("image.manager.no.stack"));
-            return true;
+    public boolean undoEdit(ColorImage img) {
+        //TODO: Future revision could manipulate a list for a redo function
+        this.currentImage.image = img;
+        this.currentImage.cmdHistory.pop();
+        return true;
+    }
+
+    /**
+     * Get the last image command
+     *
+     * @return the last command
+     * @throws EmptyStackException when there's no last command
+     */
+
+    public CommandFactory.Command lastCommand() {
+        if (this.currentImage == null) {
+            throw new EmptyStackException();
         }
+        return this.currentImage.cmdHistory.peek();
     }
 }

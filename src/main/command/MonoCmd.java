@@ -26,7 +26,7 @@ public class MonoCmd extends CommandFactory.Command {
     public boolean execute() {
         ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
         if (ei == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("command.mono.no.img"));
+            this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
             return false;
         }
         ColorImage tmpImage = ei.getImage();
