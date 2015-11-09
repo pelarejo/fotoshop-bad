@@ -4,7 +4,6 @@ import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
-import sun.plugin2.message.Message;
 
 import javax.imageio.ImageIO;
 import java.io.File;

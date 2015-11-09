@@ -1,7 +1,7 @@
 package main.image;
 
 import java.awt.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Extends standard BufferedImage class with convenience functions
