@@ -7,6 +7,9 @@ import main.locale.LocaleManager;
 
 import java.awt.*;
 
+/**
+ * Set the image as black and white
+ */
 public class MonoCmd extends CommandFactory.Command {
 
     public static final String TAG = "mono";

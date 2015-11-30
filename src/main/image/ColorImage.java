@@ -35,6 +35,10 @@ public class ColorImage extends BufferedImage {
                 setRGB(x, y, image.getRGB(x, y));
     }
 
+    /**
+     * Copy constructor
+     * @param image image to copy
+     */
     public ColorImage(ColorImage image) {
         this((BufferedImage) image);
         this.originalPath = image.getOriginalPath();

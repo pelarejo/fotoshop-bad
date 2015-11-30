@@ -7,6 +7,9 @@ import main.locale.LocaleManager;
 import java.text.MessageFormat;
 import java.util.EmptyStackException;
 
+/**
+ * Undo any undoable command.
+ */
 public class UndoCmd extends CommandFactory.Command {
 
     public static String TAG = "undo";

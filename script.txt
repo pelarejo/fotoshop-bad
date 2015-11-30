@@ -1,2 +1,20 @@
-
+help
+open input.jpg
+mono
+rot90
+rot90
+put beer180
+undo
+put beer90
+undo
+save output.jpg
+get beer180
+rot90
+save output260.jpg
+get beer90
+save output90.jpg
+save output90_nonmono.jpg
+open beer.jpg
+rot90
+save output90_nonmono.jpg
 quit

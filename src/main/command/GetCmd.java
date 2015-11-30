@@ -4,6 +4,9 @@ import main.gui.ConsoleView;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
 
+/**
+ * Gets a copy of a cache image as the current image
+ */
 public class GetCmd extends CommandFactory.Command {
 
     public static String TAG = "get";

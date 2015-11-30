@@ -4,6 +4,9 @@ import main.gui.ConsoleView;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
 
+/**
+ * Put the image in cache and assigned it a cache name
+ */
 public class PutCmd extends CommandFactory.Command {
     public static String TAG = "put";
 

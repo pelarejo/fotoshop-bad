@@ -8,6 +8,7 @@ import main.locale.LocaleManager;
 import java.awt.*;
 
 /**
+ * Rotates the image 90°
  * This class should handle every rotation possible,
  * using args to pass the angle
  */

@@ -7,6 +7,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This factory is used to create instances of command.
+ * One willing to create a new command should call the addCommand(NewClass.TAG, NewClass.class)
+ * in the static initializer.
+ */
 public final class CommandFactory {
     private static Map<String, Class<? extends Command>> cmds;
     private static final Logger logger;
@@ -28,6 +33,9 @@ public final class CommandFactory {
         addCommand(GetCmd.TAG, GetCmd.class);
     }
 
+    /**
+     * Class to inherit when one desire to create a new command
+     */
     public static abstract class Command {
         protected String[] args;
 
@@ -40,11 +48,23 @@ public final class CommandFactory {
             this.args = args;
         }
 
+        /**
+         * Used to retreive the tag at runtime
+         * @return the tag
+         */
         public abstract String getTag();
 
+        /**
+         * Main command execution method.
+         * Will be called automatically.
+         * @return false if the execution went critically wrong, true otherwise
+         */
         public abstract boolean execute();
     }
 
+    /**
+     * Class to inherit to create an undoable command
+     */
     public static abstract class UndoableCommand extends Command {
 
         public UndoableCommand(String[] args) {

@@ -3,6 +3,10 @@ package main.command;
 import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
+/**
+ * Show generic help
+ * Could be expanded as a per command manual
+ */
 public class HelpCmd extends CommandFactory.Command {
 
     public static final String TAG = "help";

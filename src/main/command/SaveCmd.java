@@ -11,6 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+/**
+ * Save the image to the desire name.
+ * Will override any existing image.
+ */
 public class SaveCmd extends CommandFactory.Command {
 
     public static final String TAG = "save";

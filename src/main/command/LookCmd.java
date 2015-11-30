@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Print the current image and cached image details
+ */
 public class LookCmd extends CommandFactory.Command {
     public final static String TAG = "look";
 

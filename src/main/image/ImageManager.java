@@ -5,12 +5,21 @@ import main.command.CommandFactory;
 
 import java.util.*;
 
+/**
+ * Class used to apply any image manipulation.
+ * Handles cache and image cloning.
+ * Image manipulation will never be applied to the current image
+ * unless using edit() and undoEdit() methods
+ */
 public class ImageManager {
     private static ImageManager instance = new ImageManager();
 
     private EditableImage currentImage;
     private Map<String, EditableImage> cache;
 
+    /**
+     * Wrapper used to handle cache
+     */
     public class EditableImage {
         private String tag;
         private ColorImage image;
@@ -71,8 +80,8 @@ public class ImageManager {
     /**
      * Replace current image with another one
      *
-     * @param tag
-     * @param img
+     * @param tag the image tag
+     * @param img the raw image to manipulate
      */
     public void newImage(String tag, ColorImage img) {
         /*
@@ -96,7 +105,7 @@ public class ImageManager {
     /**
      * Save the current image to cache
      *
-     * @param tag
+     * @param tag the image tag
      */
     public EditableImage cacheImage(String tag, @NotNull EditableImage ei) {
         return this.cache.put(tag, new EditableImage(tag, ei));
@@ -105,9 +114,9 @@ public class ImageManager {
     /**
      * Edit the current image
      *
-     * @param img
-     * @param cmd
-     * @return
+     * @param img the manipulated raw image
+     * @param cmd the command used
+     * @return true if the image was edited, false otherwise
      */
     public boolean edit(ColorImage img, CommandFactory.Command cmd) {
         /*  TODO: Future revision should trigger warning when pushing a non-undoable command
@@ -122,6 +131,7 @@ public class ImageManager {
 
     /**
      * Undo the current image's last filter
+     * @param img the raw image unedited
      */
     public boolean undoEdit(ColorImage img) {
         //TODO: Future revision could manipulate a list for a redo function
@@ -131,12 +141,11 @@ public class ImageManager {
     }
 
     /**
-     * Get the last image command
+     * Get the last current image command
      *
      * @return the last command
      * @throws EmptyStackException when there's no last command
      */
-
     public CommandFactory.Command lastCommand() {
         if (this.currentImage == null) {
             throw new EmptyStackException();

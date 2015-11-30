@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Singleton use to recover locale specific properties
+ */
 public class LocaleManager {
     private static LocaleManager instance = new LocaleManager();
 

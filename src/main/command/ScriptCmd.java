@@ -10,6 +10,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+/**
+ * Read a script of all supported command.
+ * No extra work needed here to add a Command.
+ */
 public class ScriptCmd extends CommandFactory.Command {
 
     public static final String TAG = "script";

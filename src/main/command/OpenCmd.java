@@ -10,6 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+/**
+ * Opens an image to set as a current image.
+ * Will override any current image.
+ */
 public class OpenCmd extends CommandFactory.Command {
 
     public static final String TAG = "open";

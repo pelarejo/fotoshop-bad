@@ -4,6 +4,9 @@ import main.Editor;
 import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
+/**
+ * Quits the program
+ */
 public class QuitCmd extends CommandFactory.Command {
 
     public static final String TAG = "quit";
