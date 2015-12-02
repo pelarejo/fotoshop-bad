@@ -1,6 +1,6 @@
 package main.command;
 
-import main.Editor;
+import main.Workbench;
 import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
@@ -27,7 +27,7 @@ public class QuitCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        Editor.setState(Editor.PROGRAM_STATE.QUIT);
+        Workbench.setState(Workbench.PROGRAM_STATE.QUIT);
         return true;
     }
 }

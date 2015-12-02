@@ -1,6 +1,6 @@
 package main.command;
 
-import main.Editor;
+import main.Workbench;
 import main.Parser;
 import main.gui.ConsoleView;
 import main.locale.LocaleManager;
@@ -40,7 +40,7 @@ public class ScriptCmd extends CommandFactory.Command {
         try (FileInputStream inputStream = new FileInputStream(scriptName)) {
             scriptParser.setInputStream(inputStream);
             loop:
-            while (Editor.getState().equals(Editor.PROGRAM_STATE.RUN)) {
+            while (Workbench.getState().equals(Workbench.PROGRAM_STATE.RUN)) {
                 Parser.ParsedInput pi = scriptParser.getCommand();
                 switch (pi.eState) {
                     case VALID:

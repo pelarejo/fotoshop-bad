@@ -1,5 +1,7 @@
 package main;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
@@ -21,7 +23,7 @@ import java.text.MessageFormat;
  * @version 2013.09.10
  */
 
-public class Editor {
+public class Workbench {
 
     private static PROGRAM_STATE eState;
 
@@ -35,7 +37,7 @@ public class Editor {
     /**
      * Create the editor and initialize its parser.
      */
-    public Editor() {
+    public Workbench() {
         parser = new Parser();
     }
 

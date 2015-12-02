@@ -16,6 +16,7 @@ public class LocaleManager {
     private static LocaleManager instance = new LocaleManager();
 
     private static final String MESSAGES_PATH = "res.strings.messages";
+    private static final String UI_PATH = "res.strings.ui";
     private static final Map<String, Locale> SUPPORTED_LOCALES = new HashMap<>();
     static {
         SUPPORTED_LOCALES.put("EN", Locale.ENGLISH);
@@ -24,7 +25,7 @@ public class LocaleManager {
 
     private Locale currentLocale = Locale.ENGLISH;
     private ResourceBundle bundleStrings = ResourceBundle.getBundle(MESSAGES_PATH, currentLocale);
-
+    private ResourceBundle uiStrings = ResourceBundle.getBundle(UI_PATH, currentLocale);
 
     public static LocaleManager getInstance() { return instance; }
 
@@ -34,6 +35,10 @@ public class LocaleManager {
 
     public Locale getLocale() {
         return this.currentLocale;
+    }
+
+    public ResourceBundle getUiBundle() {
+        return this.uiStrings;
     }
 
     public boolean setLocale(String loc) {
@@ -46,6 +51,7 @@ public class LocaleManager {
         } else {
             this.currentLocale = SUPPORTED_LOCALES.get(locUpp);
             this.bundleStrings = ResourceBundle.getBundle(MESSAGES_PATH, this.currentLocale);
+            this.uiStrings = ResourceBundle.getBundle(UI_PATH, currentLocale);
             return true;
         }
     }
