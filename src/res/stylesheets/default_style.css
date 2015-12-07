@@ -1,0 +1,46 @@
+.root {
+    -fx-background-color: #9E9E9E;
+ }
+
+.panel {
+    -fx-background-color: #B6B6B6;
+    -fx-border-color:
+    -fx-shadow-highlight-color,
+           -fx-outer-border,
+           -fx-inner-border,
+           -fx-body-color;
+ }
+
+ .menu {
+    -fx-background-color: #EFEFEF;
+ }
+
+ .menu: {
+    -fx-text-fill: black;
+    -fx-background-color: #000000;
+ }
+
+ .status {
+    -fx-background-color: #616161;
+    -fx-text-fill: white;
+ }
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+
+ .scroll-pane {
+    -fx-background-color: transparent;
+ }
+
+ .btn-script {
+     -fx-graphic: url("/res/icons/script.png");
+ }
+
+ .btn-mono {
+     -fx-graphic: url("/res/icons/mono.png");
+ }
+
+ .btn-rot {
+    -fx-graphic: url("/res/icons/rotate.png");
+ }

@@ -1,13 +1,14 @@
 package main.command;
 
+import main.Main;
 import main.Workbench;
+import main.io.IoHelper;
 import main.io.input.Parser;
 import main.locale.LocaleManager;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.MessageFormat;
+import java.util.NoSuchElementException;
 
 /**
  * Read a script of all supported command.
@@ -38,7 +39,7 @@ public class ScriptCmd extends CommandFactory.Command {
         try (FileInputStream inputStream = new FileInputStream(scriptName)) {
             scriptParser.setInputStream(inputStream);
             loop:
-            while (Workbench.getPgrState().equals(Workbench.PROGRAM_STATE.RUN)) {
+            while (true) {
                 Parser.ParsedInput pi = scriptParser.getCommand();
                 switch (pi.eState) {
                     case VALID:
@@ -60,6 +61,8 @@ public class ScriptCmd extends CommandFactory.Command {
                 }
                 this.currentLine++;
             }
+        } catch (NoSuchElementException | EOFException e) {
+            return true;
         } catch (FileNotFoundException ex) {
             String msg = LocaleManager.getInstance().getString("error.command.script.bad.file");
             this.ios.err.update(MessageFormat.format(msg, scriptName));

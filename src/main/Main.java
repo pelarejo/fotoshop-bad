@@ -3,6 +3,7 @@ package main;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import main.gui.FxmlHelper;
 import main.io.IoCli;
@@ -48,9 +49,12 @@ public class Main extends Application {
         Parent rootLayout = FxmlHelper.newLoader("workbench.fxml").load();
         Scene rootScene = new Scene(rootLayout);
 
+        FxmlHelper.applyStylesheet(rootScene, "default_style.css");
+
         primaryStage.setMinHeight(200);
         primaryStage.setMinWidth(400);
         primaryStage.setTitle(APPLICATION_NAME);
+        primaryStage.getIcons().add(new Image("/res/icons/app-icon.png"));
         primaryStage.setScene(rootScene);
         primaryStage.show();
     }

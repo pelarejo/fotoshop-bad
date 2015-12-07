@@ -2,6 +2,7 @@ package main.io.input;
 
 import main.command.ArgumentException;
 import main.command.CommandFactory;
+import main.command.QuitCmd;
 import main.io.ouput.Output;
 import main.io.ouput.Console;
 

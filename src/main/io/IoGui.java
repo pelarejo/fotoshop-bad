@@ -13,12 +13,19 @@ public class IoGui extends IoHelper<Input, StatusBar, Dialog, Dialog> {
 
     @Override
     public void initialize() {
-        Alert errAlrt = new Alert(Alert.AlertType.ERROR);
-        errAlrt.setTitle(LocaleManager.getInstance().getUiBundle().getString("error"));
-        this.err.setAlert(errAlrt);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(LocaleManager.getInstance().getUiBundle().getString("information"));
-        this.alrt.setAlert(alert);
+        this.err.setI(() -> {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(LocaleManager.getInstance().getUiBundle().getString("error"));
+            errAlert.setHeaderText("");
+            return errAlert;
+        });
+
+        this.alrt.setI(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(LocaleManager.getInstance().getUiBundle().getString("information"));
+            alert.setHeaderText("");
+            return alert;
+        });
     }
 }

@@ -5,6 +5,7 @@ import main.image.ImageManager;
 import main.locale.LocaleManager;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -52,7 +53,9 @@ public class OpenCmd extends CommandFactory.Command {
      */
     private ColorImage loadImage(String path) {
         try {
-            return new ColorImage(path, ImageIO.read(new File(path)));
+            BufferedImage read = ImageIO.read(new File(path));
+            if (read == null) throw new ArgumentException(LocaleManager.getInstance().getString("error.command.open.file.format"));
+            return new ColorImage(path, read);
         } catch (IOException e) {
             String msg = LocaleManager.getInstance().getString("error.command.open.file.not.found");
             this.ios.err.update(MessageFormat.format(msg, path, System.getProperty("user.dir")));

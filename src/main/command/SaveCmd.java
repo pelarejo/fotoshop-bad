@@ -41,7 +41,7 @@ public class SaveCmd extends CommandFactory.Command {
         String outputName = this.args[0];
         try {
             File outputFile = new File(outputName);
-            if (!outputFile.getParentFile().exists()) {
+            if (outputFile.getParentFile() != null && !outputFile.getParentFile().exists()) {
                 // Necessary because ImageIO.write throw NullPointerException, which is dumb
                 throw new FileNotFoundException(MessageFormat.format("Folder {0} doesn't exists", outputFile.getParentFile()));
             }

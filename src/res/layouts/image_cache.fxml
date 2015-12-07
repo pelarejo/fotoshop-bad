@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root type="javafx.scene.control.TitledPane" animated="false"
+         xmlns:fx="http://javafx.com/fxml/1"
+         xmlns="http://javafx.com/javafx/null">
+    <content>
+        <VBox>
+            <ImageView fx:id="img"/>
+            <Label fx:id="lbl"/>
+        </VBox>
+    </content>
+</fx:root>

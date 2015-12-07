@@ -1,7 +1,16 @@
 package main.image;
 
 import com.sun.istack.internal.NotNull;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import main.command.CommandFactory;
+import main.gui.ImageCache;
 
 import java.util.*;
 
@@ -15,7 +24,9 @@ public class ImageManager {
     private static ImageManager instance = new ImageManager();
 
     private EditableImage currentImage;
+    private ObjectProperty<Image> showedImage;
     private Map<String, EditableImage> cache;
+    private Accordion cacheView;
 
     /**
      * Wrapper used to handle cache
@@ -57,6 +68,7 @@ public class ImageManager {
 
     public ImageManager() {
         this.cache = new TreeMap<>();
+        this.showedImage = new SimpleObjectProperty<>();
     }
 
     public EditableImage getCurrentImage() {
@@ -91,6 +103,7 @@ public class ImageManager {
         *   }
         */
         this.currentImage = new EditableImage(tag, img);
+        refreshImg();
     }
 
     /**
@@ -100,6 +113,7 @@ public class ImageManager {
      */
     public void newImage(EditableImage cached) {
         this.currentImage = new EditableImage(cached.tag, cached);
+        refreshImg();
     }
 
     /**
@@ -108,7 +122,9 @@ public class ImageManager {
      * @param tag the image tag
      */
     public EditableImage cacheImage(String tag, @NotNull EditableImage ei) {
-        return this.cache.put(tag, new EditableImage(tag, ei));
+        EditableImage ret = this.cache.put(tag, new EditableImage(tag, ei));
+        refreshCache(tag, ei);
+        return ret;
     }
 
     /**
@@ -126,17 +142,20 @@ public class ImageManager {
         */
         this.currentImage.image = img;
         this.currentImage.cmdHistory.push(cmd);
+        refreshImg();
         return true;
     }
 
     /**
      * Undo the current image's last filter
+     *
      * @param img the raw image unedited
      */
     public boolean undoEdit(ColorImage img) {
         //TODO: Future revision could manipulate a list for a redo function
         this.currentImage.image = img;
         this.currentImage.cmdHistory.pop();
+        refreshImg();
         return true;
     }
 
@@ -151,5 +170,28 @@ public class ImageManager {
             throw new EmptyStackException();
         }
         return this.currentImage.cmdHistory.peek();
+    }
+
+    public void bind(ImageView imageView, Accordion accordion) {
+        imageView.imageProperty().bind(this.showedImage);
+        this.cacheView = accordion;
+    }
+
+    private void refreshImg() {
+        this.showedImage.set(SwingFXUtils.toFXImage(this.currentImage.image, null));
+    }
+
+    public void refreshCache(String tag, EditableImage ei) {
+        if (cacheView == null) return;
+        Platform.runLater(() -> {
+            for (TitledPane p : this.cacheView.getPanes()) {
+                if (p.getText().equals(tag)) {
+                    ((ImageCache) p).setImg(SwingFXUtils.toFXImage(ei.image, null));
+                    ((ImageCache) p).setDetails("Not done yet");
+                    return;
+                }
+            }
+            this.cacheView.getPanes().add(new ImageCache(tag, SwingFXUtils.toFXImage(ei.image, null)));
+        });
     }
 }

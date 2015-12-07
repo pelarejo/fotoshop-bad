@@ -32,7 +32,7 @@ public class Workbench extends Service<Boolean> {
 
     private static PROGRAM_STATE eState;
 
-    public final IoHelper ios;
+    public IoHelper ios;
 
     public enum PROGRAM_STATE {
         RUN, QUIT

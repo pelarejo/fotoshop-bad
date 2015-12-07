@@ -7,14 +7,14 @@ put beer180
 undo
 put beer90
 undo
-save output.jpg
+save output\output.jpg
 get beer180
 rot90
-save output260.jpg
+save output/output260.jpg
 get beer90
 save output90.jpg
 save output90_nonmono.jpg
 open beer.jpg
 rot90
-save output90_nonmono.jpg
+save output/output90_nonmono.jpg
 quit

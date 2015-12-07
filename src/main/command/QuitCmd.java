@@ -1,6 +1,5 @@
 package main.command;
 
-import main.Workbench;
 import main.locale.LocaleManager;
 
 /**
@@ -24,7 +23,8 @@ public class QuitCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        Workbench.setPgrState(Workbench.PROGRAM_STATE.QUIT);
+        System.exit(0);
+        //Workbench.setPgrState(Workbench.PROGRAM_STATE.QUIT);
         return true;
     }
 }

@@ -1,45 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.gui.WorkbenchController">
+<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.gui.WorkbenchController">
 
     <top>
-        <fx:include fx:id="mainMenuBar" source="main_menubar.fxml" />
+        <fx:include fx:id="mainMenuBar" source="main_menubar.fxml"/>
     </top>
 
     <left>
-        <GridPane BorderPane.alignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-        </GridPane>
+        <VBox fx:id="cmdList" minWidth="50" maxWidth="50">
+            <Button fx:id="scriptBtn"/>
+            <Button fx:id="rotBtn"/>
+            <Button fx:id="monoBtn"/>
+        </VBox>
     </left>
 
     <center>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+        <ScrollPane fx:id="scrollImgHolder">
+            <StackPane fx:id="imgViewHolder">
+                <ImageView fx:id="currentImage" pickOnBounds="true" preserveRatio="true"/>
+            </StackPane>
+        </ScrollPane>
     </center>
 
     <right>
-        <Accordion BorderPane.alignment="CENTER">
-            <panes>
-                <TitledPane animated="false" text="untitled 1" />
-                <TitledPane animated="false" text="untitled 2" />
-            </panes>
-        </Accordion>
+        <VBox fx:id="rightPanel" BorderPane.alignment="TOP_RIGHT" maxHeight="Infinity" prefWidth="200">
+            <Button fx:id="putBtn" text="+"/>
+            <Accordion fx:id="img_cache"/>
+        </VBox>
     </right>
 
-   <bottom>
-      <Label fx:id="statusBarLbl" text="Label" BorderPane.alignment="CENTER_LEFT" />
-   </bottom>
+    <bottom>
+        <Label fx:id="statusBarLbl" text="Label" wrapText="false" maxWidth="Infinity" BorderPane.alignment="CENTER"/>
+    </bottom>
 
 </BorderPane>
