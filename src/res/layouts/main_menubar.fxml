@@ -1,0 +1,3 @@
+<?import javafx.scene.control.MenuBar?>
+
+<MenuBar fx:id="menuBar" fx:controller="main.gui.MainMenuBarController" xmlns:fx="http://javafx.com/fxml/1"/>

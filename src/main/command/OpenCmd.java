@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
@@ -17,8 +16,6 @@ import java.text.MessageFormat;
 public class OpenCmd extends CommandFactory.Command {
 
     public static final String TAG = "open";
-
-    private ConsoleView console = new ConsoleView();
 
     public OpenCmd(String[] args) {
         super(args);
@@ -41,7 +38,7 @@ public class OpenCmd extends CommandFactory.Command {
         if (img != null) {
             ImageManager.getInstance().newImage(path, img);
             String msg = LocaleManager.getInstance().getString("command.open.loaded");
-            this.console.update(MessageFormat.format(msg, img.getOriginalPath()));
+            this.ios.out.update(MessageFormat.format(msg, img.getOriginalPath()));
             return true;
         }
         return false;
@@ -58,7 +55,7 @@ public class OpenCmd extends CommandFactory.Command {
             return new ColorImage(path, ImageIO.read(new File(path)));
         } catch (IOException e) {
             String msg = LocaleManager.getInstance().getString("error.command.open.file.not.found");
-            this.console.update(MessageFormat.format(msg, path, System.getProperty("user.dir")));
+            this.ios.err.update(MessageFormat.format(msg, path, System.getProperty("user.dir")));
             return null;
         }
     }

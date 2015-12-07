@@ -1,7 +1,6 @@
 package main.command;
 
 import main.Workbench;
-import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
 /**
@@ -10,8 +9,6 @@ import main.locale.LocaleManager;
 public class QuitCmd extends CommandFactory.Command {
 
     public static final String TAG = "quit";
-
-    private ConsoleView console = new ConsoleView();
 
     public QuitCmd(String[] args) {
         super(args);
@@ -27,7 +24,7 @@ public class QuitCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        Workbench.setState(Workbench.PROGRAM_STATE.QUIT);
+        Workbench.setPgrState(Workbench.PROGRAM_STATE.QUIT);
         return true;
     }
 }

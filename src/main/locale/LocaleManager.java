@@ -1,7 +1,7 @@
 package main.locale;
 
 import com.sun.istack.internal.NotNull;
-import main.gui.ConsoleView;
+import main.io.ouput.Console;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public class LocaleManager {
         if (!SUPPORTED_LOCALES.containsKey(locUpp)) {
             //Using properties here for consistency purposes. Will use english.
             String msg = getString("error.not.found.locale");
-            new ConsoleView().update(MessageFormat.format(msg, loc));
+            new Console().update(MessageFormat.format(msg, loc));
             return false;
         } else {
             this.currentLocale = SUPPORTED_LOCALES.get(locUpp);

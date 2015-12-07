@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
@@ -19,8 +18,6 @@ public class SaveCmd extends CommandFactory.Command {
 
     public static final String TAG = "save";
 
-    private ConsoleView consoleView = new ConsoleView();
-
     public SaveCmd(String[] args) {
         super(args);
         if (args.length < 1) {
@@ -37,7 +34,7 @@ public class SaveCmd extends CommandFactory.Command {
     public boolean execute() {
         ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
         if (ei == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.command.save.no.img"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.command.save.no.img"));
             return false;
         }
         ColorImage img = ei.getImage();
@@ -50,9 +47,9 @@ public class SaveCmd extends CommandFactory.Command {
             }
             ImageIO.write(img, "jpg", outputFile);
             String msg = LocaleManager.getInstance().getString("command.save.saved");
-            this.consoleView.update(MessageFormat.format(msg, outputName));
+            this.ios.out.update(MessageFormat.format(msg, outputName));
         } catch (IOException e) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.command.save.error"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.command.save.error"));
             return false;
         }
         return true;

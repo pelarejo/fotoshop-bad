@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
@@ -16,8 +15,6 @@ public class Rot90Cmd extends CommandFactory.UndoableCommand {
 
     public static final String TAG = "rot90";
 
-    private ConsoleView consoleView = new ConsoleView();
-
     public Rot90Cmd(String[] args) {
         super(args);
     }
@@ -31,7 +28,7 @@ public class Rot90Cmd extends CommandFactory.UndoableCommand {
     public boolean execute() {
         ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
         if (ei == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.no.image"));
             return false;
         }
         ColorImage img = ei.getImage();

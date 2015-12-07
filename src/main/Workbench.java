@@ -1,8 +1,13 @@
 package main;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-import main.gui.ConsoleView;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import main.command.CommandFactory;
+import main.io.IoHelper;
+import main.io.input.Input;
+import main.io.ouput.Output;
+import main.io.input.Parser;
 import main.locale.LocaleManager;
 
 import java.text.MessageFormat;
@@ -23,12 +28,11 @@ import java.text.MessageFormat;
  * @version 2013.09.10
  */
 
-public class Workbench {
+public class Workbench extends Service<Boolean> {
 
     private static PROGRAM_STATE eState;
 
-    private Parser parser;
-    private ConsoleView console = new ConsoleView();
+    public final IoHelper ios;
 
     public enum PROGRAM_STATE {
         RUN, QUIT
@@ -37,29 +41,28 @@ public class Workbench {
     /**
      * Create the editor and initialize its parser.
      */
-    public Workbench() {
-        parser = new Parser();
+    public Workbench(IoHelper ios) {
+        this.ios = ios;
     }
 
-    public static void setState(PROGRAM_STATE state) {
+    public static void setPgrState(PROGRAM_STATE state) {
         eState = state;
     }
 
-    public static PROGRAM_STATE getState() {
+    public static PROGRAM_STATE getPgrState() {
         return eState;
     }
 
     /**
-     * main.Main edit routine. Loops until the end of the editing session.
+     * Run routine. Loops until the end of the editing session.
      */
-    public void edit() {
+    public void run() {
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the editing session is over.
-        this.console.update(LocaleManager.getInstance().getString("screen.splash"));
+        this.ios.out.update(LocaleManager.getInstance().getString("screen.splash"));
         eState = PROGRAM_STATE.RUN;
         while (eState.equals(PROGRAM_STATE.RUN)) {
-           this.console.update("> ");     // print prompt
-            Parser.ParsedInput parsedInput = parser.getCommand();
+            Parser.ParsedInput parsedInput = this.ios.in.getCommand();
             switch (parsedInput.eState) {
                 case VALID:
                     parsedInput.cmd.execute();
@@ -67,15 +70,49 @@ public class Workbench {
                 case INVALID:
                     String msg = LocaleManager.getInstance().getString("error.command.invalid");
                     msg = MessageFormat.format(msg, parsedInput.what);
-                    this.console.update(msg);
+                    this.ios.err.update(msg);
                     break;
                 case INVALID_ARG:
-                    this.console.update(parsedInput.what);
+                    this.ios.err.update(parsedInput.what);
                     break;
-                case EMPTY:
+                case IGNORE:
                     break;
             }
         }
-        this.console.update(LocaleManager.getInstance().getString("screen.end"));
+        this.ios.out.update(LocaleManager.getInstance().getString("screen.end"));
+    }
+
+
+    // SERVICE IMPLEMENTATION
+
+    private SimpleObjectProperty<CommandFactory.Command> cmdPty = new SimpleObjectProperty<>();
+
+    public void runCommand(CommandFactory.Command cmd){
+        this.setCommand(cmd);
+        this.start();
+    }
+
+    public void setCommand(CommandFactory.Command cmd) {
+        this.cmdPty.set(cmd);
+    }
+
+    public CommandFactory.Command getCommand() {
+        return this.cmdPty.get();
+    }
+
+    @Override
+    protected Task<Boolean> createTask() {
+        final CommandFactory.Command cmd = getCommand();
+        return new Task<Boolean>() {
+            @Override
+            protected Boolean call() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return cmd.execute();
+            }
+        };
     }
 }

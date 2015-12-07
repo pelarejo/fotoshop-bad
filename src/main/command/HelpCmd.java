@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.locale.LocaleManager;
 
 /**
@@ -10,8 +9,6 @@ import main.locale.LocaleManager;
 public class HelpCmd extends CommandFactory.Command {
 
     public static final String TAG = "help";
-
-    private ConsoleView console = new ConsoleView();
 
     public HelpCmd(String[] args) {
         super(args);
@@ -24,7 +21,7 @@ public class HelpCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        this.console.update(LocaleManager.getInstance().getString("command.help.msg"));
+        this.ios.out.update(LocaleManager.getInstance().getString("command.help.msg"));
         return true;
     }
 }

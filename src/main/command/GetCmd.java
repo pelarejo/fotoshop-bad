@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
 
@@ -10,8 +9,6 @@ import main.locale.LocaleManager;
 public class GetCmd extends CommandFactory.Command {
 
     public static String TAG = "get";
-
-    private ConsoleView consoleView = new ConsoleView();
 
     public GetCmd(String[] args) {
         super(args);
@@ -29,7 +26,7 @@ public class GetCmd extends CommandFactory.Command {
     public boolean execute() {
         ImageManager.EditableImage ei = ImageManager.getInstance().getCachedImage(this.args[0]);
         if (ei == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.command.get.no.img"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.command.get.no.img"));
             return false;
         }
         ImageManager.getInstance().newImage(ei);

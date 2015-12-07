@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
 
@@ -13,8 +12,6 @@ import java.util.EmptyStackException;
 public class UndoCmd extends CommandFactory.Command {
 
     public static String TAG = "undo";
-
-    private ConsoleView consoleView = new ConsoleView();
 
     public UndoCmd(String[] args) {
         super(args);
@@ -33,10 +30,10 @@ public class UndoCmd extends CommandFactory.Command {
                 return ((CommandFactory.UndoableCommand) cmd).undo();
             } else {
                 String msg = LocaleManager.getInstance().getString("error.command.undo.not.undoable");
-                this.consoleView.update(MessageFormat.format(msg, cmd.getTag()));
+                this.ios.err.update(MessageFormat.format(msg, cmd.getTag()));
             }
         } catch (EmptyStackException e) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.command.undo.nothing"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.command.undo.nothing"));
         }
         return true;
     }

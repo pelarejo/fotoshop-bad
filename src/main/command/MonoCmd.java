@@ -1,6 +1,5 @@
 package main.command;
 
-import main.gui.ConsoleView;
 import main.image.ColorImage;
 import main.image.ImageManager;
 import main.locale.LocaleManager;
@@ -13,8 +12,6 @@ import java.awt.*;
 public class MonoCmd extends CommandFactory.Command {
 
     public static final String TAG = "mono";
-
-    private ConsoleView consoleView = new ConsoleView();
 
     public MonoCmd(String[] args) {
         super(args);
@@ -29,11 +26,10 @@ public class MonoCmd extends CommandFactory.Command {
     public boolean execute() {
         ImageManager.EditableImage ei = ImageManager.getInstance().getCurrentImage();
         if (ei == null) {
-            this.consoleView.update(LocaleManager.getInstance().getString("error.no.image"));
+            this.ios.err.update(LocaleManager.getInstance().getString("error.no.image"));
             return false;
         }
         ColorImage tmpImage = ei.getImage();
-        //Graphics2D g2 = tmpImage.createGraphics();
         int height = tmpImage.getHeight();
         int width = tmpImage.getWidth();
         for (int y = 0; y < height; y++) {

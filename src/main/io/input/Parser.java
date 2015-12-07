@@ -1,7 +1,9 @@
-package main;
+package main.io.input;
 
 import main.command.ArgumentException;
 import main.command.CommandFactory;
+import main.io.ouput.Output;
+import main.io.ouput.Console;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -23,46 +25,32 @@ import java.util.Scanner;
  * @author Michael Kolling and David J. Barnes
  * @version 2006.03.30
  */
-public class Parser {
+public class Parser extends Input {
     private Scanner reader;         // source of command input
-
-    public enum PARSED_STATE {
-        VALID,
-        INVALID,
-        INVALID_ARG,
-        EMPTY
-    }
-
-    public class ParsedInput {
-        public PARSED_STATE eState;
-        public CommandFactory.Command cmd;
-        public String what;
-
-        private ParsedInput(PARSED_STATE eState) {
-            this.eState = eState;
-        }
-
-        private ParsedInput(PARSED_STATE eState, String what) {
-            this.eState = eState;
-            this.what = what;
-        }
-
-        private ParsedInput(PARSED_STATE eState, String what, CommandFactory.Command cmd) {
-            this.eState = eState;
-            this.cmd = cmd;
-            this.what = what;
-        }
-    }
+    private String prompt;
+    private Output out;
 
     /**
      * Create a parser to read from the terminal window.
      */
     public Parser() {
-        reader = new Scanner(System.in);
+        this.reader = new Scanner(System.in);
+        this.prompt = "";
+        this.out = new Console();
+    }
+
+    public Parser(String prompt) {
+        this.reader = new Scanner(System.in);
+        this.prompt = prompt;
+        this.out = new Console();
     }
 
     public void setInputStream(FileInputStream str) {
         reader = new Scanner(str);
+    }
+
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
     }
 
     /**
@@ -71,6 +59,9 @@ public class Parser {
     public ParsedInput getCommand() {
         String cmdName = "";
         ArrayList<String> args = new ArrayList<>();
+
+        this.out.update(this.prompt);     // print prompt
+
         String inputLine = reader.nextLine();
 
         // Find up to two words on the line.
@@ -81,7 +72,8 @@ public class Parser {
         while (tokenizer.hasNext()) {
             args.add(tokenizer.next());
         }
-        if (cmdName.equals("")) return new ParsedInput(PARSED_STATE.EMPTY);
+
+        if (cmdName.equals("")) return new ParsedInput(PARSED_STATE.IGNORE);
         CommandFactory.Command cmd;
         try {
             cmd = CommandFactory.get(cmdName, args.toArray(new String[args.size()]));

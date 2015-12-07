@@ -1,5 +1,9 @@
 package main.command;
 
+import main.Main;
+import main.Workbench;
+import main.io.IoHelper;
+
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -38,6 +42,7 @@ public final class CommandFactory {
      */
     public static abstract class Command {
         protected String[] args;
+        protected final IoHelper ios;
 
         /**
          * Always implement this constructor in inherited class.
@@ -46,6 +51,7 @@ public final class CommandFactory {
          */
         public Command(String[] args) {
             this.args = args;
+            this.ios = Main.wb.ios;
         }
 
         /**
@@ -76,7 +82,7 @@ public final class CommandFactory {
 
     /**
      * Gets a new instance of a command.
-     * Commands will throw RuntimeException when arguments are incorrect
+     * ICommand will throw RuntimeException when arguments are incorrect
      *
      * @param tag of the command to look for
      * @return the command instance, or null if the command doesn't exists
