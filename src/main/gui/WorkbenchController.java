@@ -57,6 +57,7 @@ public class WorkbenchController implements Initializable {
             Main.stage.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseClickFilter);
         });
 
+        this.ioGui.initialize();
         this.ioGui.out.bind(statusBarLbl.textProperty());
     }
 }

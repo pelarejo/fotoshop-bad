@@ -21,7 +21,7 @@ public class HelpCmd extends CommandFactory.Command {
 
     @Override
     public boolean execute() {
-        this.ios.out.update(LocaleManager.getInstance().getString("command.help.msg"));
+        this.ios.alrt.update(LocaleManager.getInstance().getString("command.help.msg"));
         return true;
     }
 }

@@ -11,7 +11,7 @@ import main.io.ouput.Output;
  * @param <E> Error Output
  * @param <A> Alert Output
  */
-public class IoHelper<I extends Input, O extends Output, E extends Output, A extends Output> {
+public abstract class IoHelper<I extends Input, O extends Output, E extends Output, A extends Output> {
 
     public final I in;
     public final O out;
@@ -24,4 +24,9 @@ public class IoHelper<I extends Input, O extends Output, E extends Output, A ext
         this.err = err;
         this.alrt = alrt;
     }
+
+    /**
+     * Always called in UIThread
+     */
+    public abstract void initialize();
 }

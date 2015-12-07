@@ -106,11 +106,6 @@ public class Workbench extends Service<Boolean> {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 return cmd.execute();
             }
         };

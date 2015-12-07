@@ -10,6 +10,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import main.Main;
+import main.command.HelpCmd;
 import main.command.OpenCmd;
 import main.command.UndoCmd;
 import main.locale.LocaleManager;
@@ -68,13 +69,7 @@ public class MainMenuBarController extends MenuBar implements Initializable {
                 Main.wb.runCommand(new UndoCmd(null));
                 break;
             case "help.about":
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(LocaleManager.getInstance().getUiBundle().getString("error"));
-                alert.setHeaderText("Look, an Information Dialog");
-                alert.setContentText("I have a great message for you!");
-
-                alert.showAndWait();
-
+                Main.wb.runCommand(new HelpCmd(null));
                 break;
             default:
                 throw new RuntimeException();

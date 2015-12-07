@@ -8,4 +8,9 @@ public class IoCli extends IoHelper<Parser, Console, ErrConsole, Console> {
     public IoCli() {
         super(new Parser("> "), new Console(), new ErrConsole(), new Console());
     }
+
+    @Override
+    public void initialize() {
+
+    }
 }
